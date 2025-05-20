@@ -19,15 +19,50 @@ class EventoSismico:
         # estado
         self.estadoActual = estado
         self.cambiosEstado = [CambioEstado(estado, fecha_ini)]
+        self.cambioBloqueado = None  # esto esta para guardarlo durante el caso de uso
 
     def bloquear(self, estadoBloqueado, fechaHora, responsable):
         for cambio in self.cambiosEstado:
             if cambio.sosEstadoActual():
                 cambio.setFechaHoraFin(fechaHora)
                 break
-        cambioBloqueado = CambioEstado(estadoBloqueado, fechaHora, responsable)
+        self.cambioBloqueado = CambioEstado(estadoBloqueado, fechaHora, responsable)
         self.estadoActual = estadoBloqueado
-        self.cambiosEstado.append(cambioBloqueado)
+        self.cambiosEstado.append(self.cambioBloqueado)
+
+    def rechazar(self, estado, fechaHora, responsable):  # esto se puede combinar con los otros, cambiando d. secuencia
+        self.cambioBloqueado.setFechaHoraFin(fechaHora)
+        cambio = CambioEstado(estado, fechaHora, responsable)
+        self.estadoActual = estado
+        self.cambiosEstado.append(cambio)
+
+    def confirmar(self, estado, fechaHora, responsable):
+        self.cambioBloqueado.setFechaHoraFin(fechaHora)
+        cambio = CambioEstado(estado, fechaHora, responsable)
+        self.estadoActual = estado
+        self.cambiosEstado.append(cambio)
+
+    def derivar(self, estado, fechaHora, responsable):
+        self.cambioBloqueado.setFechaHoraFin(fechaHora)
+        cambio = CambioEstado(estado, fechaHora, responsable)
+        self.estadoActual = estado
+        self.cambiosEstado.append(cambio)
+
+    def getDatosSismicos(self):  # esto trae los datos de las muestras para el sismograma
+        for serie in self.seriesTemporales:
+            serie.getDatos()
+
+    def sosAutoDetectado(self):
+        return self.estadoActual.sosAutoDetectado()
+
+    def tenesAlcance(self):
+        return not self.alcanceSismo is None
+
+    def tenesMagnitud(self):
+        return self.valorMagnitud > 0  # esto deberia usar la clase magnitud
+
+    def tenesOrigen(self):
+        return not self.origenGeneracion is None
 
     def getAlcance(self):
         return self.alcanceSismo.getNombre()
@@ -52,3 +87,6 @@ class EventoSismico:
 
     def getLongitudHipocentro(self):
         return self.longitudHipocentro
+
+    def getValorMagnitud(self):
+        return self.valorMagnitud
