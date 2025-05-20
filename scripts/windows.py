@@ -147,6 +147,8 @@ class MainWindowRevision(QWidget):
             self.table.setItem(r, 2, QTableWidgetItem(f"{e.profundidad}"))
             self.table.setItem(r, 3, QTableWidgetItem(f"{e.valor_magnitud:.1f}"))
         """
+
+
         self.table.setRowCount(0)
         for r, e in enumerate(evs):
             self.table.insertRow(r)
