@@ -1,7 +1,7 @@
-from CambioEstado import CambioEstado
+from scripts.entidad.CambioEstado import CambioEstado
 
 class EventoSismico:
-    def __init__(self, fecha_ini, fecha_fin, e_longitud, e_latitud, h_longitud, h_latitud, valor_magnitud,
+    def __init__(self, fecha_ini, fecha_fin, e_latitud, e_longitud, h_latitud, h_longitud, valor_magnitud,
                  alcance, clasificacion, origen, series_temporales, estado):
         self.fechaHoraOcurrencia = fecha_ini
         self.fechaHoraFin = fecha_fin
