@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import (
-    QWidget, QMainWindow, QLabel, QPushButton,
+    QApplication, QWidget, QMainWindow, QLabel, QPushButton,
     QVBoxLayout, QTableWidget, QTableWidgetItem,
     QHeaderView
 )
@@ -14,6 +14,11 @@ class MenuWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Menú Principal")
         self.resize(600, 300)
+        pantalla = QApplication.primaryScreen().geometry()  # Tamaño de la pantalla
+        ventana = self.geometry()  # Tamaño de la ventana
+        x = (pantalla.width() - ventana.width()) // 2
+        y = (pantalla.height() - ventana.height()) // 2
+        self.move(x, y)  # Mueve la ventana al centro de la pantalla
         w = QWidget()
         v = QVBoxLayout()
         lbl = QLabel(f"Bienvenido {Generador.sesion.obtenerUsuarioLogueado().getNombreApellido()}")
@@ -34,7 +39,8 @@ class MenuWindow(QMainWindow):
         self.close()
 
     def open_revision(self):
-        self.rev = PantallaEventoSismico.opRegistrarResultadoRevisionManual(self)
+        self.pantallaRevision = PantallaEventoSismico(self)
+        self.pantallaRevision.opRegistrarResultadoRevisionManual()
         self.close()
 
 class AllEventsWindow(QWidget):
@@ -74,27 +80,27 @@ class AllEventsWindow(QWidget):
                 e.fecha_revision = None
 
         for r, e in enumerate(sample_events):
-            self.grillaEventoSismico.insertRow(r)
-            self.grillaEventoSismico.setItem(r, 0, QTableWidgetItem(str(e.id)))
-            self.grillaEventoSismico.setItem(r, 1, QTableWidgetItem(e.fecha_ini.strftime("%d/%m/%Y %H:%M:%S")))
-            self.grillaEventoSismico.setItem(r, 2, QTableWidgetItem(e.fecha_fin.strftime("%d/%m/%Y %H:%M:%S")))
+            self.tablaEventosSismicos.insertRow(r)
+            self.tablaEventosSismicos.setItem(r, 0, QTableWidgetItem(str(e.id)))
+            self.tablaEventosSismicos.setItem(r, 1, QTableWidgetItem(e.fecha_ini.strftime("%d/%m/%Y %H:%M:%S")))
+            self.tablaEventosSismicos.setItem(r, 2, QTableWidgetItem(e.fecha_fin.strftime("%d/%m/%Y %H:%M:%S")))
             epic = f"({e.latitud_epi:.2f},{e.longitud_epi:.2f})"
-            self.grillaEventoSismico.setItem(r, 3, QTableWidgetItem(epic))
+            self.tablaEventosSismicos.setItem(r, 3, QTableWidgetItem(epic))
             hip = f"({e.latitud_hipo:.2f},{e.longitud_hipo:.2f})"
-            self.grillaEventoSismico.setItem(r, 4, QTableWidgetItem(hip))
-            self.grillaEventoSismico.setItem(r, 5, QTableWidgetItem(f"{e.valor_magnitud:.1f}"))
-            self.grillaEventoSismico.setItem(r, 6, QTableWidgetItem(e.clasificacion.nombre))
-            self.grillaEventoSismico.setItem(r, 7, QTableWidgetItem(e.origen.nombre))
-            self.grillaEventoSismico.setItem(r, 8, QTableWidgetItem(e.alcance.nombre))
-            self.grillaEventoSismico.setItem(r, 9, QTableWidgetItem(e.estado.nombre))
+            self.tablaEventosSismicos.setItem(r, 4, QTableWidgetItem(hip))
+            self.tablaEventosSismicos.setItem(r, 5, QTableWidgetItem(f"{e.valor_magnitud:.1f}"))
+            self.tablaEventosSismicos.setItem(r, 6, QTableWidgetItem(e.clasificacion.nombre))
+            self.tablaEventosSismicos.setItem(r, 7, QTableWidgetItem(e.origen.nombre))
+            self.tablaEventosSismicos.setItem(r, 8, QTableWidgetItem(e.alcance.nombre))
+            self.tablaEventosSismicos.setItem(r, 9, QTableWidgetItem(e.estado.nombre))
             if e.estado in [ESTADO_CONFIRMADO, ESTADO_RECHAZADO, ESTADO_REV_EXPERTO]:
-                self.grillaEventoSismico.setItem(r, 10, QTableWidgetItem(e.analista_revisor.nombre))
-                self.grillaEventoSismico.setItem(r, 11, QTableWidgetItem(
+                self.tablaEventosSismicos.setItem(r, 10, QTableWidgetItem(e.analista_revisor.nombre))
+                self.tablaEventosSismicos.setItem(r, 11, QTableWidgetItem(
                     e.fecha_revision.strftime("%d/%m/%Y %H:%M:%S") if e.fecha_revision else "-"
                 ))
             else:
-                self.grillaEventoSismico.setItem(r, 10, QTableWidgetItem("-"))
-                self.grillaEventoSismico.setItem(r, 11, QTableWidgetItem("-"))
+                self.tablaEventosSismicos.setItem(r, 10, QTableWidgetItem("-"))
+                self.tablaEventosSismicos.setItem(r, 11, QTableWidgetItem("-"))
 
     def go_back(self):
         self.parent.show()

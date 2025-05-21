@@ -7,9 +7,11 @@ class SerieTemporal:
         self.sismografo = sismografo
         self.condicionAlarma = False  # esto sale de validar todos los umbrales de los detalles
 
-    def getDatos(self):
+    def getDatos(self):  # [fecha, [valor]]
+        datos = []
         for muestra in self.muestrasSismicas:
-            muestra.getDatos()
+            datos.append(muestra.getDatos())
+        return datos
 
     def getNombreEstacionSismologica(self):
         return self.sismografo.getNombreEstacion()

@@ -8,6 +8,8 @@ class MuestraSismica:
     def crearDetalleMuestra(self, valor, tipo):
         self.detallesMuestraSismica.append(DetalleMuestraSismica(valor, tipo))
 
-    def getDatos(self):
+    def getDatos(self):  # fecha, [valor]
+        detalles = []
         for detalle in self.detallesMuestraSismica:
-            detalle.getDatos()
+            detalles.append(detalle.getDatos()[0])  # deberia clasificar segun denominacion [1]
+        return self.fechaHoraMuestra, detalles

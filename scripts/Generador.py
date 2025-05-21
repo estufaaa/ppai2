@@ -6,9 +6,12 @@ from entidad.Empleado import Empleado
 from entidad.Usuario import Usuario
 from entidad.Sesion import Sesion
 from entidad.EventoSismico import EventoSismico
+from entidad.SerieTemporal import SerieTemporal
 from entidad.AlcanceSismo import AlcanceSismo
 from entidad.OrigenDeGeneracion import OrigenDeGeneracion
 from entidad.ClasificacionSismo import ClasificacionSismo
+from entidad.EstacionSismologica import EstacionSismologica
+from entidad.Sismografo import Sismografo
 
 empleados = [Empleado("Juan", "Perez", "juan@gmail.com", "111-1111"),
              Empleado("Pepe", "Fernandez", "pepe@gmail.com", "222-2222"),
@@ -33,6 +36,11 @@ clasificaciones = [ClasificacionSismo("Superficial", 0, 60),
                    ClasificacionSismo("Intermedio", 60, 300),
                    ClasificacionSismo("Profundo", 300, 650)]
 
+estaciones = [EstacionSismologica(1, "CORDOBA"), EstacionSismologica(2, "TUCUMAN"),
+              EstacionSismologica(3, "LA RIOJA")]
+
+sismografos = [Sismografo(i + 1, datetime(2021 + i, i + 1, i + 1), 1234 + 1111*i, estaciones[i]) for i in range(3)]
+
 eventos = []
 # eventos random
 for i in range(1, 5):
@@ -48,7 +56,7 @@ for i in range(1, 5):
     eventos.append(ev)
 # eventos AutoDetectados
 for i in range(3):
-    inicio = datetime.now() - timedelta(minutes=random.randrange(1, 5), seconds=random.randrange(0, 60))
+    inicio = datetime.now() - timedelta(seconds=random.randrange(0, 300))
     fin = None  # esta ocurriendo ahora
     latitud = random.uniform(-90.0, 90.0)
     longitud = random.uniform(-180, 180)
@@ -58,7 +66,10 @@ for i in range(3):
     clasificacion = clasificaciones[random.randrange(len(clasificaciones))]
     origen = origenes[random.randrange(len(origenes))]
     ev = EventoSismico(inicio, fin, latitud, longitud, latitud + random.uniform(-0.1, 0.1),
-                       longitud + random.uniform(-0.1, 0.1), magnitud, alcance,
-                       clasificacion, origen, [], estado)
+                       longitud + random.uniform(-0.1, 0.1), magnitud, alcance, clasificacion, origen,
+                       [SerieTemporal(inicio, inicio, 50, [], sismografos[i]),
+                        SerieTemporal(inicio, inicio + timedelta(seconds=random.uniform(60, 300)),
+                                      50, [], sismografos[random.randrange(len(sismografos))])],
+                       estado)
     eventos.append(ev)
 

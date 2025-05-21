@@ -3,5 +3,5 @@ class DetalleMuestraSismica:
         self.valor = valor
         self.tipoDeDato = tipo
 
-    def getDatos(self):
-        self.tipoDeDato.getDenominacion()
+    def getDatos(self):  # valor, denominacion
+        return self.valor, self.tipoDeDato.getDenominacion()

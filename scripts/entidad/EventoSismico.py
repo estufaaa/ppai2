@@ -21,7 +21,7 @@ class EventoSismico:
         self.cambiosEstado = [CambioEstado(estado, fecha_ini)]
         self.cambioBloqueado = None  # esto esta para guardarlo durante el caso de uso
 
-    def bloquear(self, estadoBloqueado, fechaHora, responsable):
+    def bloquear(self, estadoBloqueado, fechaHora, responsable=None):  # en el diagrama de secuencia no busca el responsable
         for cambio in self.cambiosEstado:
             if cambio.sosEstadoActual():
                 cambio.setFechaHoraFin(fechaHora)
@@ -48,9 +48,18 @@ class EventoSismico:
         self.estadoActual = estado
         self.cambiosEstado.append(cambio)
 
-    def getDatosSismicos(self):  # esto trae los datos de las muestras para el sismograma
+    def getDatosSismicos(self):  # [estacion, [fecha, [valor]]]
+        estaciones = []
+        datosPorEstacion = []
         for serie in self.seriesTemporales:
-            serie.getDatos()
+            datos = serie.getDatos()  # [fecha, [valor]]
+            estacion = serie.getNombreEstacionSismologica()
+            if not estacion in estaciones:
+                estaciones.append(estacion)
+                datosPorEstacion.append((estacion, datos))
+            else:
+                datosPorEstacion[estaciones.index(estacion)][1].extend(datos)
+        return datosPorEstacion
 
     def sosAutoDetectado(self):
         return self.estadoActual.sosAutoDetectado()

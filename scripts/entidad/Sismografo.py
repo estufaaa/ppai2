@@ -5,5 +5,5 @@ class Sismografo:
         self.nroSerie = serie
         self.estacionSismologica = estacion
 
-    def getNombreEstacionSismologica(self):
-        return self.estacionSismologica.getName()
+    def getNombreEstacion(self):
+        return self.estacionSismologica.getNombre()
