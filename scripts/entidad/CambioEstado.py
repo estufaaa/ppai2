@@ -10,3 +10,6 @@ class CambioEstado:
 
     def setFechaHoraFin(self, fin):
         self.fechaHoraFin = fin
+
+    def getResponsable(self):
+        return self.responsable

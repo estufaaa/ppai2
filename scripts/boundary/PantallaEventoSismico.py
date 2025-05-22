@@ -8,17 +8,14 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
-from scripts import Generador
-
 class PantallaEventoSismico(QWidget):
     def __init__(self, pantallaInicio):
         super().__init__()
         self.pantallaInicio = pantallaInicio
 
-    def opRegistrarResultadoRevisionManual(self):
+    def opRegistrarResultadoRevisionManual(self, eventos, alcances, origenes, sesion, estados):
         self.habilitarVentana()
-        self.gestor = GestorEventoSismico(self, Generador.eventos, Generador.alcances, Generador.origenes,
-                                            Generador.sesion, Generador.estados)
+        self.gestor = GestorEventoSismico(self, eventos, alcances, origenes, sesion, estados)
         self.gestor.nuevoResultadoRevisionManual()
 
     def habilitarVentana(self):
@@ -33,6 +30,9 @@ class PantallaEventoSismico(QWidget):
         self.move(x, y)  # Mueve la ventana al centro de la pantalla
         # crear tabla
         self.layout = QVBoxLayout()
+        botonAtras = QPushButton("<< Atras")
+        botonAtras.clicked.connect(lambda: (self.pantallaInicio.show(), self.close()))
+        self.layout.addWidget(botonAtras)
         self.tablaEventosSismicos = QTableWidget()
         self.tablaEventosSismicos.setColumnCount(4)
         self.tablaEventosSismicos.setHorizontalHeaderLabels(["FechaHora", "Epicentro", "Hipocentro", "Magnitud"])
@@ -238,6 +238,22 @@ class PantallaEventoSismico(QWidget):
     def tomarSeleccionDerivar(self, ventana):
         ventana.close()
         self.gestor.tomarSeleccionDerivar()
+
+    def solicitarCorreccionDatosES(self, mensaje):
+        ventanaError = QDialog()
+        ventanaError.setWindowTitle("Erro de Validacion")
+        ventanaError.resize(400, 100)
+        layoutError = QVBoxLayout()
+        ventanaError.setLayout(layoutError)
+        layoutError.addWidget(QLabel(mensaje))
+        layoutBoton = QHBoxLayout()
+        layoutBoton.setAlignment(Qt.AlignCenter)
+        botonError = QPushButton("Ok")
+        botonError.setFixedWidth(100)
+        botonError.clicked.connect(lambda: (ventanaError.close()))
+        layoutBoton.addWidget(botonError)
+        layoutError.addLayout(layoutBoton)
+        ventanaError.exec_()
 
     def finCU(self):
         ventanaFin = QDialog()

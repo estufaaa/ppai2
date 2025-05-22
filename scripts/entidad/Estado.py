@@ -6,6 +6,9 @@ class Estado:
     def sosAutoDetectado(self):
         return self.nombreEstado == "AutoDetectado"
 
+    def sosAutoConfirmado(self):
+        return self.nombreEstado == "AutoConfirmado"
+
     def sosBloqEnRevision(self):
         return self.nombreEstado == "BloqueadoEnRevision"
 

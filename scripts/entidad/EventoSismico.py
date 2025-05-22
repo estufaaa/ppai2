@@ -64,6 +64,9 @@ class EventoSismico:
     def sosAutoDetectado(self):
         return self.estadoActual.sosAutoDetectado()
 
+    def sosAutoConfirmado(self):
+        return self.estadoActual.sosAutoConfirmado()
+
     def tenesAlcance(self):
         return not self.alcanceSismo is None
 
@@ -73,16 +76,25 @@ class EventoSismico:
     def tenesOrigen(self):
         return not self.origenGeneracion is None
 
+    def getEstadoActual(self):
+        return self.estadoActual.getNombre()
+
     def getAlcance(self):
+        if self.alcanceSismo is None:
+            return ""
         return self.alcanceSismo.getNombre()
 
     def setAlcance(self, alcance):
         self.alcanceSismo = alcance
 
     def getClasificacion(self):
+        if self.clasificacion is None:
+            return ""
         return self.clasificacion.getNombre()
 
     def getOrigen(self):
+        if self.origenGeneracion is None:
+            return ""
         return self.origenGeneracion.getNombre()
 
     def setOrigen(self, origen):
@@ -108,3 +120,9 @@ class EventoSismico:
 
     def setValorMagnitud(self, magnitud):
         self.valorMagnitud = magnitud
+
+    def getResponsable(self):
+        for cambio in self.cambiosEstado:
+            if cambio.sosEstadoActual():
+                return cambio.getResponsable()
+        return None

@@ -86,7 +86,10 @@ class GestorEventoSismico:
         self.solicitarSeleccionAccion()
 
     def tomarModificacionDatosES(self, magnitud, alcance, origen):
-        self.eventoSeleccionado.setValorMagnitud(magnitud)
+        try:
+            self.eventoSeleccionado.setValorMagnitud(float(magnitud))
+        except ValueError:
+            self.eventoSeleccionado.setValorMagnitud(None)
         self.eventoSeleccionado.setAlcance(None)  # si no lo encuentro queda None para que salte la validacion
         for a in self.alcances:
             if alcance == a.getNombre():
@@ -103,23 +106,53 @@ class GestorEventoSismico:
         self.pantalla.solicitarSeleccionAccion()
 
     def tomarSeleccionConfirmar(self):
-        self.validarExistenciaDatosES()
+        validacion = self.validarExistenciaDatosES()
+        if validacion != 0:
+            self.solicitarCorreccionDatosES(validacion)
+            return
+        self.confirmarEventoSismico()
+        self.finCU()
 
     def tomarSeleccionRechazar(self):
-        self.validarExistenciaDatosES()
+        validacion = self.validarExistenciaDatosES()
+        if validacion != 0:
+            self.solicitarCorreccionDatosES(validacion)
+            return
         self.rechazarEventoSismico()
         self.finCU()
 
     def tomarSeleccionDerivar(self):
-        self.validarExistenciaDatosES()
+        validacion = self.validarExistenciaDatosES()
+        if validacion != 0:
+            self.solicitarCorreccionDatosES(validacion)
+            return
+        self.derivarEventoSismico()
+        self.finCU()
 
-    def validarExistenciaDatosES(self):
+    def validarExistenciaDatosES(self):  # cualquier cosa que no sea 0 es un codigo de error
         if not self.eventoSeleccionado.tenesMagnitud():
-            return
+            return 1
         if not self.eventoSeleccionado.tenesAlcance():
-            return
+            return 2
         if not self.eventoSeleccionado.tenesOrigen():
-            return
+            return 3
+        return 0
+
+    def solicitarCorreccionDatosES(self, codigo):
+        if codigo == 1:
+            self.pantalla.solicitarCorreccionDatosES("La magnitud ingresada es invalida.")
+        elif codigo == 2:
+            self.pantalla.solicitarCorreccionDatosES("El alcance seleccionado es invalido.")
+        elif codigo == 3:
+            self.pantalla.solicitarCorreccionDatosES("El origen seleccionado es invalido.")
+        else:
+            self.pantalla.solicitarCorreccionDatosES("Los datos ingresados son invalidos.")
+
+    def confirmarEventoSismico(self):
+        fechaHora = self.obtenerFechaHoraActual()
+        estado = self.buscarEstadoConfirmado()
+        analista = self.obtenerASLogueado()
+        self.eventoSeleccionado.confirmar(estado, fechaHora, analista)
 
     def rechazarEventoSismico(self):
         fechaHora = self.obtenerFechaHoraActual()
@@ -127,9 +160,25 @@ class GestorEventoSismico:
         analista = self.obtenerASLogueado()
         self.eventoSeleccionado.rechazar(estado, fechaHora, analista)
 
+    def derivarEventoSismico(self):
+        fechaHora = self.obtenerFechaHoraActual()
+        estado = self.buscarEstadoDerivado()
+        analista = self.obtenerASLogueado()
+        self.eventoSeleccionado.rechazar(estado, fechaHora, analista)
+
+    def buscarEstadoConfirmado(self):
+        for estado in self.estados:
+            if estado.sosAmbitoEventoSismico() and estado.sosConfirmado():
+                return estado
+
     def buscarEstadoRechazado(self):
         for estado in self.estados:
             if estado.sosAmbitoEventoSismico() and estado.sosRechazado():
+                return estado
+
+    def buscarEstadoDerivado(self):
+        for estado in self.estados:
+            if estado.sosAmbitoEventoSismico() and estado.sosDerivado():
                 return estado
 
     def obtenerASLogueado(self):

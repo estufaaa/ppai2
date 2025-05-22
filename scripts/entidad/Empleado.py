@@ -5,5 +5,5 @@ class Empleado:
         self.nombre = nombre
         self.telefono = telefono
 
-    def getNombreApellido(self):
+    def getNombre(self):
         return f"{self.nombre} {self.apellido}"

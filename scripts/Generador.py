@@ -12,6 +12,13 @@ from entidad.OrigenDeGeneracion import OrigenDeGeneracion
 from entidad.ClasificacionSismo import ClasificacionSismo
 from entidad.EstacionSismologica import EstacionSismologica
 from entidad.Sismografo import Sismografo
+from scripts.entidad.CambioEstado import CambioEstado
+
+
+def pickRandom(array):
+    if not isinstance(array, list):
+        raise ValueError
+    return array[random.randrange(len(array))]
 
 empleados = [Empleado("Juan", "Perez", "juan@gmail.com", "111-1111"),
              Empleado("Pepe", "Fernandez", "pepe@gmail.com", "222-2222"),
@@ -51,8 +58,10 @@ for i in range(1, 5):
     magnitud = random.uniform(0.1, 10)
     estado = estados[1] if magnitud >= 4 else estados[5] if magnitud >= 3 else estados[4]
     ev = EventoSismico(inicio, fin, latitud, longitud, latitud + random.uniform(-0.1, 0.1),
-                       longitud + random.uniform(-0.1, 0.1), magnitud, None,
-                       None, None, [], estado)
+                       longitud + random.uniform(-0.1, 0.1), magnitud, pickRandom(alcances),
+                       pickRandom(clasificaciones), pickRandom(origenes), [], estado)
+
+    ev.cambiosEstado[0].responsable = pickRandom(empleados) if estado != estados[1] else None
     eventos.append(ev)
 # eventos AutoDetectados
 for i in range(3):
@@ -62,17 +71,16 @@ for i in range(3):
     longitud = random.uniform(-180, 180)
     magnitud = random.uniform(0.1, 3.99)
     estado = estados[0]   # AutoDetectado
-    alcance = alcances[random.randrange(len(alcances))]
-    clasificacion = clasificaciones[random.randrange(len(clasificaciones))]
-    origen = origenes[random.randrange(len(origenes))]
+    alcance = pickRandom(alcances)
+    clasificacion = pickRandom(clasificaciones)
+    origen = pickRandom(origenes)
     ev = EventoSismico(inicio, fin, latitud, longitud, latitud + random.uniform(-0.1, 0.1),
                        longitud + random.uniform(-0.1, 0.1), magnitud, alcance, clasificacion, origen,
                        [SerieTemporal(inicio, inicio,
-                                      50, [], sismografos[random.randrange(len(sismografos))]),
+                                      50, [], pickRandom(sismografos)),
                         SerieTemporal(inicio, inicio + timedelta(seconds=random.uniform(60, 300)),
-                                      50, [], sismografos[random.randrange(len(sismografos))]),
+                                      50, [], pickRandom(sismografos)),
                         SerieTemporal(inicio, inicio + timedelta(seconds=random.uniform(60, 300)),
-                                      50, [], sismografos[random.randrange(len(sismografos))])],
+                                      50, [], pickRandom(sismografos))],
                        estado)
     eventos.append(ev)
-
