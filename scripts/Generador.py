@@ -67,7 +67,10 @@ for i in range(3):
     origen = origenes[random.randrange(len(origenes))]
     ev = EventoSismico(inicio, fin, latitud, longitud, latitud + random.uniform(-0.1, 0.1),
                        longitud + random.uniform(-0.1, 0.1), magnitud, alcance, clasificacion, origen,
-                       [SerieTemporal(inicio, inicio, 50, [], sismografos[i]),
+                       [SerieTemporal(inicio, inicio,
+                                      50, [], sismografos[random.randrange(len(sismografos))]),
+                        SerieTemporal(inicio, inicio + timedelta(seconds=random.uniform(60, 300)),
+                                      50, [], sismografos[random.randrange(len(sismografos))]),
                         SerieTemporal(inicio, inicio + timedelta(seconds=random.uniform(60, 300)),
                                       50, [], sismografos[random.randrange(len(sismografos))])],
                        estado)

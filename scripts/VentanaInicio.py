@@ -21,7 +21,7 @@ class MenuWindow(QMainWindow):
         self.move(x, y)  # Mueve la ventana al centro de la pantalla
         w = QWidget()
         v = QVBoxLayout()
-        lbl = QLabel(f"Bienvenido {Generador.sesion.obtenerUsuarioLogueado().getNombreApellido()}")
+        lbl = QLabel(f"Bienvenido {Generador.sesion.obtenerEmpleado().getNombreApellido()}")
         lbl.setAlignment(Qt.AlignCenter)
         v.addWidget(lbl)
         btn1 = QPushButton("Ver Eventos Sísmicos")

@@ -68,7 +68,7 @@ class EventoSismico:
         return not self.alcanceSismo is None
 
     def tenesMagnitud(self):
-        return self.valorMagnitud > 0  # esto deberia usar la clase magnitud
+        return isinstance(self.valorMagnitud, (int, float)) and self.valorMagnitud > 0  # esto deberia usar la clase magnitud
 
     def tenesOrigen(self):
         return not self.origenGeneracion is None
@@ -76,11 +76,17 @@ class EventoSismico:
     def getAlcance(self):
         return self.alcanceSismo.getNombre()
 
+    def setAlcance(self, alcance):
+        self.alcanceSismo = alcance
+
     def getClasificacion(self):
         return self.clasificacion.getNombre()
 
     def getOrigen(self):
         return self.origenGeneracion.getNombre()
+
+    def setOrigen(self, origen):
+        self.origenGeneracion = origen
 
     def getFechaHoraOcurrencia(self):
         return self.fechaHoraOcurrencia
@@ -99,3 +105,6 @@ class EventoSismico:
 
     def getValorMagnitud(self):
         return self.valorMagnitud
+
+    def setValorMagnitud(self, magnitud):
+        self.valorMagnitud = magnitud

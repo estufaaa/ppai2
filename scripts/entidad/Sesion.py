@@ -4,5 +4,5 @@ class Sesion:
         self.fechaHoraInicio = inicio
         self.fechaHoraFin = None
 
-    def obtenerUsuarioLogueado(self):  # deberia llamarse obtenerEmpleado en el diagrama
+    def obtenerEmpleado(self):  # deberia llamarse obtenerEmpleado en el diagrama
         return self.usuario.obtenerEmpleado()
