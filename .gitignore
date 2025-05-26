@@ -1,3 +1,8 @@
 .venv/
 .idea/
 __pychache__/
+scripts/__pycache__/
+scripts/boundary/__pycache__/
+scripts/control/__pycache__/
+scripts/entidad/__pycache__/
+scripts_viejo/

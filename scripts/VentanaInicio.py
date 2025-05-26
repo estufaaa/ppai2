@@ -10,7 +10,6 @@ from PyQt5.QtCore import Qt
 import Generador
 from boundary.PantallaEventoSismico import PantallaEventoSismico
 
-
 class MenuWindow(QMainWindow):
     def __init__(self):
         super().__init__()

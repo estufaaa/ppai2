@@ -13,7 +13,6 @@ class PantallaEventoSismico(QWidget):
         super().__init__()
         self.pantallaInicio = pantallaInicio
 
-
     # Primer metodo del diagrama de secuencia
     def opRegistrarResultadoRevisionManual(self, eventos, alcances, origenes, sesion, estados):
         self.habilitarVentana()
@@ -49,9 +48,7 @@ class PantallaEventoSismico(QWidget):
     def solicitarSeleccionEventoSismico(self, eventos):
         self.eventosAutoDetectados = []
         self.tablaEventosSismicos.setRowCount(0)
-        print(enumerate(eventos))
         for r, evento in enumerate(eventos):
-            print(r)
             self.eventosAutoDetectados.append(evento[0])
             self.tablaEventosSismicos.insertRow(r)
             datos = [
