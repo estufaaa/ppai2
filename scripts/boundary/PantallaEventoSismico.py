@@ -38,7 +38,6 @@ class PantallaEventoSismico(QWidget):
         self.tablaEventosSismicos = QTableWidget()
         self.tablaEventosSismicos.setColumnCount(4)
         self.tablaEventosSismicos.setHorizontalHeaderLabels(["FechaHora", "Epicentro", "Hipocentro", "Magnitud"])
-        self.tablaEventosSismicos.cellDoubleClicked.connect(self.tomarSeleccionEventoSismico)
         header = self.tablaEventosSismicos.horizontalHeader()
         for i in range(4):
             header.setSectionResizeMode(i, QHeaderView.Stretch)
@@ -47,6 +46,7 @@ class PantallaEventoSismico(QWidget):
 
     def solicitarSeleccionEventoSismico(self, eventos):
         self.eventosAutoDetectados = []
+        self.tablaEventosSismicos.cellDoubleClicked.connect(self.tomarSeleccionEventoSismico)
         self.tablaEventosSismicos.setRowCount(0)
         for r, evento in enumerate(eventos):
             self.eventosAutoDetectados.append(evento[0])
@@ -64,11 +64,11 @@ class PantallaEventoSismico(QWidget):
 
 
     def tomarSeleccionEventoSismico(self, row, col):
-        self.gestor.tomarSeleccionEventoSismico(self.eventosAutoDetectados[row])
         #  borrar la tabla
         self.layout.removeWidget(self.tablaEventosSismicos)
         self.tablaEventosSismicos.setParent(None)
         self.tablaEventosSismicos.deleteLater()
+        self.gestor.tomarSeleccionEventoSismico(self.eventosAutoDetectados[row])
 
     def mostrarDatosEventoSeleccionado(self, valorMagnitud, alcance, clasificacion, origen, sismogramas):
         # ajustar pantalla
@@ -220,13 +220,13 @@ class PantallaEventoSismico(QWidget):
         layoutAccion = QVBoxLayout()
         ventanaAccion.setLayout(layoutAccion)
         layoutAccion.addWidget(QLabel("Resultado de la revision:"))
-        botonConfirmar = QPushButton("Confirmar")
+        botonConfirmar = QPushButton("Confirmar evento")
         botonConfirmar.clicked.connect(lambda: self.tomarSeleccionConfirmar(ventanaAccion))
         layoutAccion.addWidget(botonConfirmar)
-        botonRechazar = QPushButton("Rechazar")
+        botonRechazar = QPushButton("Rechazar evento")
         botonRechazar.clicked.connect(lambda: self.tomarSeleccionRechazar(ventanaAccion))
         layoutAccion.addWidget(botonRechazar)
-        botonDerivar = QPushButton("Derivar")
+        botonDerivar = QPushButton("Solicitar revision a experto")
         botonDerivar.clicked.connect(lambda: self.tomarSeleccionDerivar(ventanaAccion))
         layoutAccion.addWidget(botonDerivar)
         ventanaAccion.exec_()
