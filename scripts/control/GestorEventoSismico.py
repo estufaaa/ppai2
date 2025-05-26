@@ -46,7 +46,7 @@ class GestorEventoSismico:
         datos = self.obtenerDatosSismicos()  # [estacion, [fecha, [valores]]]
         sismogramas = self.llamarCUGenerarSismograma(datos)  # estacion, ruta
         self.pantalla.mostrarDatosEventoSeleccionado(magnitud, alcance, clasificacion, origen, sismogramas)
-        self.habilitarOpcionVisualizarMapaES()
+        self.habilitarOpVisualizarMapaES()
         self.habilitarOpModificacionDatosES()
 
     def bloquearEventoSismico(self):
@@ -82,7 +82,7 @@ class GestorEventoSismico:
         ruta = os.path.join(os.path.dirname(__file__), '../..', 'img', 'sismograma.png')
         return [(datos[i][0], ruta) for i in range(len(datos))]
 
-    def habilitarOpcionVisualizarMapaES(self):
+    def habilitarOpVisualizarMapaES(self):
         self.pantalla.habilitarOpVisualizarMapaES()
 
     def tomarOpcionVisualizarMapa(self):

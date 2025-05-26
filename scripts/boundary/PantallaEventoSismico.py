@@ -62,7 +62,6 @@ class PantallaEventoSismico(QWidget):
                 item.setFlags(item.flags() & ~Qt.ItemIsEditable)  # Desactivar edición
                 self.tablaEventosSismicos.setItem(r, col, item)
 
-
     def tomarSeleccionEventoSismico(self, row, col):
         #  borrar la tabla
         self.layout.removeWidget(self.tablaEventosSismicos)
