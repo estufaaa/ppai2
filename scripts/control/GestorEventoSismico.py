@@ -30,7 +30,6 @@ class GestorEventoSismico:
                 listaDatos.append(evento.getLongitudHipocentro())
                 listaDatos.append(evento.getValorMagnitud())
                 autoDetectados.append(listaDatos)
-
         return autoDetectados
 
     def ordenarPorFechaHoraOcurrencia(self, eventos):
@@ -40,7 +39,7 @@ class GestorEventoSismico:
     def tomarSeleccionEventoSismico(self, evento):
         self.eventoSeleccionado = evento
         self.bloquearEventoSismico()
-        magnitud = self.eventoSeleccionado.getValorMagnitud()
+        magnitud = self.obtenerMagnitud()
         alcance = self.obtenerAlcance()
         clasificacion = self.obtenerClasificacion()
         origen = self.obtenerOrigenDeGeneracion()
@@ -63,6 +62,9 @@ class GestorEventoSismico:
             if estado.sosAmbitoEventoSismico() and estado.sosBloqEnRevision():
                 return estado
         return None
+
+    def obtenerMagnitud(self):
+        return self.eventoSeleccionado.getValorMagnitud()
 
     def obtenerAlcance(self):
         return self.eventoSeleccionado.getAlcance()
