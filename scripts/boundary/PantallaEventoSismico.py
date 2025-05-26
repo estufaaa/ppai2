@@ -13,11 +13,14 @@ class PantallaEventoSismico(QWidget):
         super().__init__()
         self.pantallaInicio = pantallaInicio
 
+
+    # Primer metodo del diagrama de secuencia
     def opRegistrarResultadoRevisionManual(self, eventos, alcances, origenes, sesion, estados):
         self.habilitarVentana()
         self.gestor = GestorEventoSismico(self, eventos, alcances, origenes, sesion, estados)
-        self.gestor.nuevoResultadoRevisionManual()
+        self.gestor.nuevoResultadoRevisionManual() # Tercer metodo llama al gestor
 
+    # Segundo metodo
     def habilitarVentana(self):
         self.show()
         self.setWindowTitle("Revisión Manual - Selección")
@@ -44,20 +47,24 @@ class PantallaEventoSismico(QWidget):
         self.setLayout(self.layout)
 
     def solicitarSeleccionEventoSismico(self, eventos):
-        self.eventosAutoDetectados = eventos
+        self.eventosAutoDetectados = []
         self.tablaEventosSismicos.setRowCount(0)
+        print(enumerate(eventos))
         for r, evento in enumerate(eventos):
+            print(r)
+            self.eventosAutoDetectados.append(evento[0])
             self.tablaEventosSismicos.insertRow(r)
             datos = [
-                evento.getFechaHoraOcurrencia().strftime("%d/%m/%Y %H:%M:%S"),
-                f"({evento.getLatitudEpicentro():.5f}, {evento.getLongitudEpicentro():.5f})",
-                f"({evento.getLatitudHipocentro():.5f}, {evento.getLongitudHipocentro():.5f})",
-                f"{evento.getValorMagnitud():.1f}"
+                evento[1].strftime("%d/%m/%Y %H:%M:%S"),
+                f"({evento[2]:.5f}, {evento[3]:.5f})",
+                f"({evento[4]:.5f}, {evento[5]:.5f})",
+                f"{evento[6]:.1f}"
             ]
             for col, valor in enumerate(datos):
                 item = QTableWidgetItem(valor)
                 item.setFlags(item.flags() & ~Qt.ItemIsEditable)  # Desactivar edición
                 self.tablaEventosSismicos.setItem(r, col, item)
+
 
     def tomarSeleccionEventoSismico(self, row, col):
         self.gestor.tomarSeleccionEventoSismico(self.eventosAutoDetectados[row])

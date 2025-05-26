@@ -21,11 +21,20 @@ class GestorEventoSismico:
         autoDetectados = []
         for evento in self.eventosSismicos:
             if evento.sosAutoDetectado():
-                autoDetectados.append(evento)
+                listaDatos = []
+                listaDatos.append(evento)
+                listaDatos.append(evento.getFechaHoraOcurrencia())
+                listaDatos.append(evento.getLatitudEpicentro())
+                listaDatos.append(evento.getLongitudEpicentro())
+                listaDatos.append(evento.getLatitudHipocentro())
+                listaDatos.append(evento.getLongitudHipocentro())
+                listaDatos.append(evento.getValorMagnitud())
+                autoDetectados.append(listaDatos)
+
         return autoDetectados
 
     def ordenarPorFechaHoraOcurrencia(self, eventos):
-        eventos.sort(key=lambda e: e.fechaHoraOcurrencia)
+        eventos.sort(key=lambda e: e[1])
         return eventos
 
     def tomarSeleccionEventoSismico(self, evento):
